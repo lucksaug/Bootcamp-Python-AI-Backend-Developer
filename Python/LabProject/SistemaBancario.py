@@ -1,74 +1,38 @@
+# Biblioteca que traz o system, responsável pela execução de comandos no terminal
 import os
+# Biblioteca que traz o system, responsável por identificar 
 import platform
 
-class Banco:
+# Classe principal 
+class Principal:
     def __init__(self):
         # Lista de usuários
         self.usuarios = [
-            # posição 0
             [
-                # posição 0
-                "41955640858",
-                # posição 1
-                "Lucas",
-                # posição 2
-                "27/04/2000",
-                # posição 3
+                # CPF
+                "49561237892",
+                # NOME
+                "Jake Harper",
+                # DATA DE NASCIMENTO
+                "30/02/2005",
+                # ENDEREÇO
                 [
-                    "Engenheiro Augusto Durante",
-                    600,
-                    "Perus",
+                    # LOGRADOURO
+                    "Av. do Estado",
+                    # NÚMERO
+                    12,
+                    # BAIRRO
+                    "Centro",
+                    # CIDADE
                     "SP"
                 ],
-                # # posição 4
-                # [
-                #     # posição 0
-                #     [   
-                #         # posição 0
-                #         "0001",
-                #         # posição 1 
-                #         "1",
-                #     ],
-                #     [   
-                #         # posição 0
-                #         "0001",
-                #         # posição 1 
-                #         "2",
-                #     ],
-                #     [   
-                #         # posição 0
-                #         "0001",
-                #         # posição 1 
-                #         "3",
-                #     ],
-                #     [   
-                #         # posição 0
-                #         "0001",
-                #         # posição 1 
-                #         "4",
-                #     ]
-                # ]
             ],
-            [
-                "14853332880",
-                "Elizete",
-                "10/02/1972",
-                [
-                    "Engenheiro Augusto Durante",
-                    600, 
-                    "Perus",
-                    "SP"     
-                ]
-            ]
         ]
         # Lista de contas
         self.contas = [
-            # CPF DO USUARIO,
-            # AGENCIA,
-            # NUMERO DA CONTA,
             [
-                #CPF #0
-                "41955640858",
+                #CPF #
+                "49561237892",
                 # Agência #1
                 "0001",
                 # Número da conta #2
@@ -78,66 +42,36 @@ class Banco:
                 #Saques realizados no dia #4
                 0
             ],
-            [
-                "14853332880",
-                "0001",
-                "2",
-                0.00,
-                0
-                
-            ],
-            [
-                "41955640858",
-                "0001",
-                "3",
-                0.00,
-                0
-                
-            ],
-            [
-                "41955640858",
-                "0001",
-                "4",
-                0.00,
-                0
-                
-            ],
         ]
         # Variável responsável por informar a quantidade de saques já realizados
         self.saques_realizados = 0
+        # Limite de valor por saque
         self.limite_de_saque = 500
         # Lista responsável para armazenar os depositos realizados.
         self.extratos = [
-            # [0]
             [
-                # Numero da Conta [0]
+                # Numero da Conta
                 "1",
-                #[1]
                 [
-                    # Depósito [0]
+                    # Depósito
                     "DEPÓSITO: + R$ 2000,00",
-                    # Saque [1]
+                    # Saque
                     "SAQUE: - R$ 300,00",
                 ],
             ],
-            [
-               "2",
-               [
-                  "DEPÓSITO: + R$ 2000,00",
-                  "SAQUE: - R$ 300,00" 
-               ] 
-            ]
         ]
     
     # Função para limpar a tela quando necessario.
     def limpar_tela(self, clear=True):
-        # Se clear for verdadeiro, limpará com o comando "clear" do bash - linux, para windows "cls" do cmd, 
+        # Se clear for verdadeiro, limpará o terminal
         if clear == True:
             if platform.system() == "Windows":
+                # Comando para Windows
                 os.system("cls")
             else:
+                # Comando para Linux
                 os.system("clear")
-                
+        # Se for Falso, ele retorna None para que o programa continue
         else:
             return None
 
@@ -267,25 +201,7 @@ class Banco:
                     
         # Variáveis de informação de usuário para serem armazenadas na lista global
         print(f"""
-        CPF: {cpf}""")
-        nome = input("""
-        NOME: """)
-                
-        data_de_nascimento = input("""
-        DATA DE NASCIMENTO [EX: DD/MM/AAAA]: """)
-        
-        rua = input("""
-        LOGRADOURO: """)
-        
-        nro = int(input("""
-        NÚMERO: """))
-        
-        bairro = input(""" 
-        BAIRRO: """)
-        
-        cidade = input(""" 
-        CIDADE[EX: SP]: """) 
-        
+        CPF: {cpf}""")    
         # Insere os dados na lista
         self.usuarios.append([
                 nome,
@@ -595,6 +511,9 @@ class Banco:
         SALDO EM CONTA: {self.contas[conta][3]:.2f}""")
             # Após exibir todos os dados, O loop é encerrado
             break
+
+
+
 
 # Condição para executar o programa.
 if __name__ == "__main__":

@@ -25,7 +25,6 @@ contatos = {
         "Telefone": "+551178945612",
         "Planeta": "Alderaan",
     },
-     
 }
 
 # for contato in contatos:
@@ -130,10 +129,23 @@ usuarios = {
             }
         }
 
-for chave in usuarios.items("cpf"):
-    print(chave)
+teste = [
+    {"nome":"Lucas",
+     "idade": 24},
+    {"nome":"Renato",
+     "idade": 48},
+    {"nome":"Elizete",
+     "idade": 52},
+]
 
 
+    # for chave in usuarios.items("cpf"):
+if __name__ =="__main__":
+    key = "idade"
+    for item in range(len(teste)):
+        for chave, valor in teste[item].items():
+            if chave == key:
+                print(valor)
 
 
 
