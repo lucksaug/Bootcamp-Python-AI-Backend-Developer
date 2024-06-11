@@ -1,16 +1,17 @@
 from Cliente import *
-from Transacoes import Deposito, Saque
+from Transacoes import *
 from Historico import *
 from abc import abstractmethod
 from Main import Principal
 
 
 class Conta:
+    _saldo = 0.0 
+    _agencia = "0001"
+    
     def __init__(self, cliente=None, historico=None):
-        self._saldo = 0.0 
-        self._numero = len(cliente._contas) + 1
-        self._agencia = "0001"
         self._cliente = cliente
+        self._numero = len(cliente._contas) + 1
         self._historico = historico
     
     @property
@@ -66,19 +67,22 @@ class Conta:
             #         agencia = cliente._contas[conta]["_agencia"]
             #         cliente = cliente              
             #         return ContaCorrente(limite, limite_de_saque, saldo, numero, agencia, cliente)
-
+    
+    @Principal.registrar_log
     def nova_conta(self, cliente):
         self.cliente = cliente
         self.historico = Historico()
         cliente.adicionar_conta(self)
-        
+    
+    @Principal.registrar_log
     def depositar(self, valor:float):
         if valor > 0:
             self.saldo += valor
             return True
         else:
             return "\tNÃO FOI POSSÍVEL REALIZAR O DEPÓSITO, ACEITO SOMENTE VALORES POSITIVOS"
-            
+    
+    @Principal.registrar_log
     def sacar(self, valor:float):
         if self.limite_de_saque < 3:
             if valor > 0 and valor <= self.limite:

@@ -1,12 +1,13 @@
+import csv 
 from Contas import * 
 from Transacoes import Deposito, Saque
 from Main import Principal
 
 
 class Cliente:
+    _contas:list = []
     def __init__(self, endereco=None):
         self._endereco = endereco
-        self._contas:list = []
         
     @property
     def endereco(self):
@@ -24,7 +25,8 @@ class Cliente:
         else:
             Principal.limpar_tela()
             print(f"""{registro}""")
-            
+    
+    @Principal.registrar_log
     def adicionar_conta(self, conta):
         self._contas.append(conta)
         Principal.limpar_tela()
@@ -109,8 +111,21 @@ class PessoaFisica(Cliente):
 
     @abstractmethod
     def e_cliente(cls, identificacao):
-        if cls.cpf == identificacao:
-            return True
-        else:
+        try:
+            with open(Principal.ROOT_PATH / "data" / "usuario.csv", "r") as arquivo:
+                leitor = csv.DictReader(arquivo)
+                if identificacao == leitor["cpf"]:
+                    return True
+                else: 
+                    return False
+        except FileNotFoundError as error:
+            print(f"{error}")
             return False
+        except IOError as error:
+            print(f"\t{error.upper()}")
+            return False
+        # if cls.cpf == identificacao:
+        #     return True
+        # else:
+        #     return False
         

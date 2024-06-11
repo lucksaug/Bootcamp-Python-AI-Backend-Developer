@@ -1,20 +1,28 @@
 from os import system
-import platform as so 
+import platform as so
+from datetime import datetime
+from patlib import Path
+import csv
 from Cliente import *
 from Contas import *
 from Transacoes import *
 from Historico import *
 
-#TODO: adicionar print("====CONTAS====") no EXIBIR CONTAS
-
-#TODO: e_cliete() -> identificar se existe o cliente
 
 
-class Principal:   
-    def __init__ (self):
-        cliente = PessoaFisica()
+class Principal:  
+    ROOT_PATH = Path(__file__).parent
         
-    @classmethod
+    def registrar_log(self, funcao):
+        try:
+            with open(ROOT_PATH / "log" / "log.txt","a") as arquivo:
+                nome_da_funcao = funcao().__name__
+                arquivo.write(f"\n{datetime.utcnow()} {nome_da_funcao}")
+        except IOError as error:
+            print(f"\t{error}") 
+        funcao()  
+    
+    @classmethod    
     def limpar_tela(cls, clear=True):
         if clear == True:
             if so.system() == "Windows":
@@ -28,14 +36,14 @@ class Principal:
         self.limpar_tela(clear)
         opcao = input("""
         [1] - LOGIN
-        [2] - SIGNIN
+        [2] - CADASTRO
         [0] - SAIR
         : """)
         while  opcao != "0":
             if opcao == "1":
                 self.login()
             elif opcao == "2":
-                self.signup()          
+                self.cadastro_usuario()          
             elif opcao == "0":
                 break
             else:
@@ -135,6 +143,7 @@ class Principal:
             else:
                 cls.menu(cliente,conta)
 
+    @registrar_log
     def login(self, clear=True):
         self.limpar_tela(clear)
         cliente_id = input("""
@@ -159,32 +168,33 @@ class Principal:
         [0] - NÃO
         : """)
             if opcao =="1":
-                self.signup(tipo_de_cliente, cliente_id)
+                self.cadastro_usuario(tipo_de_cliente, cliente_id)
             else:
                 self.main()
-  
-    def signup(self, tipo_de_cliente=None, cliente_id=None, clear=True):
+    
+    @registrar_log
+    def cadastro_usuario(self, tipo_de_cliente=None, cliente_id=None, clear=True):
         self.limpar_tela(clear)
         if tipo_de_cliente == "CPF":
             self.limpar_tela()
             try:
                 cliente = self.info_user_cadastro(tipo_de_cliente="CPF", cliente_id=cliente_id)            
             except ValueError as error:
-                print(f"""\t{error}""")
+                print(f"\t{error}")
             else:
                 self.limpar_tela()
-                print("""\tUSUARIO CRIADO COM SUCESSO\n\tOBRIGADO POR SER NOSSO CLIENTE""")
+                print("\tUSUARIO CRIADO COM SUCESSO\n\tOBRIGADO POR SER NOSSO CLIENTE")
                 self.menu(cliente, clear=False)
         elif tipo_de_cliente =="CNPJ":
             try:
                 cliente = self.info_user_cadastro(tipo_de_cliente="CNPJ", cliente_id=cliente_id)
             except ValueError as error:
-                print(f"""{error}""")
+                print(f"{error}")
             else:
                 self.limpar_tela()
-                print("""\tUSUARIO CRIADO COM SUCESSO\n\tOBRIGADO POR SER NOSSO CLIENTE""")
+                print("\tUSUARIO CRIADO COM SUCESSO\n\tOBRIGADO POR SER NOSSO CLIENTE")
                 self.menu(cliente, clear=False)
-        elif tipo_de_cliente ==None:
+        elif tipo_de_cliente == None:
             cadastro = input("""
         CADASTRO DE
         [1] - PESSOA FISICA
@@ -195,12 +205,18 @@ class Principal:
                 self.limpar_tela()
                 tipo_de_cliente = "CPF"
                 try:
-                    cliente = self.info_user_cadastro(tipo_de_cliente)            
+                    cliente = self.info_user_cadastro(tipo_de_cliente)
+                    try: 
+                        with open(ROOT_PATH / "data" / "usuario.csv", "w") as arquivo:
+                            escritor = csv.writer(arquivo)
+                            escritor.writerow(["cpf",{cliente.cpf}])
+                    except IOError as error:
+                        print(f"\t{error}")
                 except ValueError as error:
-                    print(f"""{error}""")
+                    print(f"{error}")
                 else:
                     self.limpar_tela()
-                    print("""\tUSUARIO CRIADO COM SUCESSO\n\tOBRIGADO POR SER NOSSO CLIENTE""")
+                    print("\tUSUARIO CRIADO COM SUCESSO\n\tOBRIGADO POR SER NOSSO CLIENTE")
                     self.menu(cliente, clear=False)
             
             elif cadastro == "2":
@@ -209,10 +225,10 @@ class Principal:
                 try:
                     cliente = self.info_user_cadastro(tipo_de_cliente, cliente_id=cliente_id)
                 except ValueError as error:
-                    print(f"""{error}""")
+                    print(f"{error}")
                 else:
                     self.limpar_tela()
-                    print("""\tUSUARIO CRIADO COM SUCESSO\n\tOBRIGADO POR SER NOSSO CLIENTE""")
+                    print("\tUSUARIO CRIADO COM SUCESSO\n\tOBRIGADO POR SER NOSSO CLIENTE")
                     self.menu(cliente, clear=False)
                 # cliente = PessoaJuridica()
                 # self.menu(cliente, clear=False)
@@ -230,7 +246,7 @@ class Principal:
                 if len(cpf) < 11 or len(cpf) >= 12:
                     cls.limpar_tela()
                     print("""\tNÚMERO INCORRETO""")
-                    cls.signup(tipo_de_cliente=tipo_de_cliente,clear=False)
+                    cls.cadastro_usuario(tipo_de_cliente=tipo_de_cliente,clear=False)
             usuario_existe = PessoaFisica.e_cliente(cpf)
             if usuario_existe:
                 raise ValueError("\tUSUARIO JA CADASTRADO NO SISTEMA")
@@ -249,7 +265,7 @@ class Principal:
                 if len(cpf) < 14 or len(cpf) >= 15:
                     cls.limpar_tela()
                     print("""\tNÚMERO INCORRETO""")
-                    cls.signup(tipo_de_cliente=tipo_de_cliente,clear=False)
+                    cls.cadastro_usuario(tipo_de_cliente=tipo_de_cliente,clear=False)
             else:
                 cnpj = cliente_id
             # return PessoaJuridica()
