@@ -1,0 +1,27 @@
+{
+    "_id": 1,
+    "nome": "Lucks Aug",
+    "idade": 24,
+    "data_nascimento": "2000-04-27",
+    "enderecos":[
+        {
+            "logradouro": "Tattoine",
+            "numero": 200,
+            "bairro": "Brooklin",
+            "cidade": "São Paulo"  
+        }
+    ],
+    "interesses":[
+        "Piscina",
+        "Praia"
+    ],
+    "reservas": ["ObjectId(*"123")" ]
+
+}
+
+{
+    "_id": ObjectId("123"),
+    "destino": ObjectId("456"),
+    "status": "pendente",
+    "usuário": ObjectId("789")
+}
