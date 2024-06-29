@@ -12,7 +12,6 @@ class Settings(BaseSettings):
     ROOT_PATH: str = "/"
     DATABASE_URL: str = os.getenv("DATABASE_URL")
     model_config = SettingsConfigDict(env_file=ROOT_FILE_PATH / ".env")
-    # model_config = SettingsConfigDict(".env")
 
 
 settings = Settings()
