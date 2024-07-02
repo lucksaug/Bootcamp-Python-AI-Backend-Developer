@@ -16,7 +16,7 @@ O vídeo nos mostra 5 curiosidades, cada uma com imagens correspondentes à narr
 
 ##### OBS: Por ter sido gerado por IA o vídeo contem algumas informações erradas que são fácilmente corrigidas, o
 
-[LINK PARA O VÍDEO](Bootcamp-Python-AI-Backend-Developer/Python/AI/invideo-ai-Video-teste-5-curiosidades.mp4)
+[LINK PARA O VÍDEO](./invideo-ai-Video-teste-5-curiosidades.mp4)
 
 
 ## 💭 Reflexão
